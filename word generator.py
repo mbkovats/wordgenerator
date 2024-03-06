@@ -2,6 +2,7 @@ letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
 vowels = ["A", "E", "I", "O", "U"]
 consonants = ["B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z"]
 import random
+import math
 
 minlen = ""
 maxlen = ""
@@ -11,14 +12,18 @@ words = ""
 while(minlen == "" or maxlen == "" or int(minlen) > int(maxlen) or int(minlen) < 3):
     minlen = input("Minimum word length: ")
     maxlen = input("Maximum word length: ")
-    if int(minlen) > int(maxlen):
+    if minlen == "" or maxlen == "":
+        print("The minimum and maximum word length cannot be blank.")
+    elif int(minlen) > int(maxlen):
         print("The minimum word length cannot be greater than the maximum word length.")
-    if int(minlen) < 3:
+    elif int(minlen) < 3:
         print("The minimum word length cannot be 2 or less.")
 
 while(nulls == "" or int(nulls) < 1):
     nulls = input("How many word terminators would you like? (The larger the number, the smaller the average word length): ")
-    if int(nulls) <= 0:
+    if nulls == "":
+        print("The number of word terminators cannot be blank.")
+    elif int(nulls) < 1:
         print("The number of word terminators cannot be negative or zero.")
 
 # Add the word terminators to the list of letters
@@ -33,33 +38,31 @@ for i in range(int(words)):
     word = ""
     # Keep track of previous letter
     prev = "NULL"
+    # Keep track of the number of vowels in the word
+    vowcount = 0
     # Create a word
     while(True):
         choice = random.choice(letters)
-        # Count the number of vowels in the word
-        vowcount = 0
         if choice in vowels:
             vowcount += 1
-        if len(word) > int(maxlen):
-            print(word)
-            break
-        # If you hit a word terminator, print the word after doing some checks to see if it is valid
-        if choice == "NULL":
+        # If you hit a word terminator or the length of the word is greater than the maximum length, print the word after doing some checks to see if it is valid
+        if choice == "NULL" or len(word) >= int(maxlen):
             # Check if the word has at least one vowel and one consonant and is longer than the minimum length
-            if any([letter in word for letter in vowels]) and any([letter in word for letter in consonants]) and len(word) > int(minlen):
+            if any([letter in word for letter in vowels]) and any([letter in word for letter in consonants]) and len(word) >= int(minlen):
                 # Words can't end with J or V
                 if prev == "J" or prev == "V":
                     word += "E"
                 # Floss Rule
-                if prev in ["F", "L", "S", "Z"] and vowcount == 1 and word[-2] != prev:
-                    word += prev
+                if vowcount == 1:
+                    if prev in ["F", "L", "S", "Z"] and vowcount == 1 and word[-2] != prev:
+                        word += prev
                 prevletter = "NULL"
                 prevprevletter = "NULL"
                 for j,letter in enumerate(word):
                     if prevletter != "NULL" and prevprevletter != "NULL":
-                        # Make consonants double if vowel before is short and there are 2 syllables. Example: rabbit or letter
-                        if vowcount == 2:
-                            if prevprevletter in consonants and prevletter in vowels and letter in consonants:
+                        # Make consonants double if vowel before is short and there are 2 syllables. Rabbit rule.
+                        if vowcount == 2 and j < len(word) - 1:
+                            if prevprevletter in consonants and prevletter in vowels and letter in consonants and word[-1] not in vowels and word[j+1] in vowels and letter in ["B","D","R","P","T","M"] and random.randint(0,1) == 1:
                                 word = word[:j] + letter + word[j:]
                         # Make sure there are no triple letters
                         if prevletter == prevprevletter and prevletter == letter:
