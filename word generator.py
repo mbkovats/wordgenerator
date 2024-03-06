@@ -18,7 +18,7 @@ while(minlen == "" or maxlen == "" or int(minlen) > int(maxlen) or int(minlen) <
 
 while(nulls == "" or int(nulls) < 1):
     nulls = input("How many word terminators would you like? (The larger the number, the smaller the average word length): ")
-    if nulls <= 0:
+    if int(nulls) <= 0:
         print("The number of word terminators cannot be negative or zero.")
 
 while(words == "" or int(words) < 1):
@@ -36,31 +36,33 @@ for i in range(int(words)):
         if choice in vowels:
             vowcount += 1
         if len(word) > int(maxlen):
-            print(word + "\n")
+            print(word)
             break
         if choice == "NULL":
             if any([letter in word for letter in vowels]) and any([letter in word for letter in consonants]) and len(word) > int(minlen):
+                if prev == "J" or prev == "V":
+                    word += "E"
                 if prev == "F" or prev == "L" or prev == "S" and vowcount == 1 and word[-2] != prev:
                     word += prev
-                elif prev == "J" or prev == "V":
-                    word += "E"
-                elif vowcount == 2:
-                    prevletter = "NULL"
-                    prevprevletter = "NULL"
-                    for i,letter in enumerate(word):
-                        if prevletter != "NULL" and prevprevletter != "NULL":
+                prevletter = "NULL"
+                prevprevletter = "NULL"
+                for j,letter in enumerate(word):
+                    if prevletter != "NULL" and prevprevletter != "NULL":
+                        if vowcount == 2:
                             if prevprevletter in consonants and prevletter in vowels and letter in consonants:
-                                word = word[:i] + letter + word[i:]
-                                prev = choice
-                        prevletter = letter
-                        prevprevletter = prevletter
-                print(word + "\n")
+                                word = word[:j] + letter + word[j:]
+                        if prevletter == prevprevletter and prevletter == letter:
+                            word = word[:j-1] + word[j:]
+                    prevprevletter = prevletter
+                    prevletter = letter
+                print(word)
                 break
             else:
                 pass
         else:
             if choice == "Q":
                 word += "QU"
+                vowcount += 1
                 prev = "U"
             elif prev in consonants and choice in consonants:
                 if prev == choice and len(word) > 2 and word[-2] != choice:
