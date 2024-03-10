@@ -2,7 +2,6 @@ letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
 vowels = ["A", "E", "I", "O", "U"]
 consonants = ["B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z"]
 import random
-import math
 
 minlen = ""
 maxlen = ""
@@ -53,9 +52,8 @@ for i in range(int(words)):
                 if prev == "J" or prev == "V":
                     word += "E"
                 # Floss Rule
-                if vowcount == 1:
-                    if prev in ["F", "L", "S", "Z"] and vowcount == 1 and word[-2] != prev:
-                        word += prev
+                if prev in ["F", "L", "S", "Z"] and vowcount == 1 and word[-2] != prev:
+                    word += prev
                 prevletter = "NULL"
                 prevprevletter = "NULL"
                 for j,letter in enumerate(word):
@@ -126,6 +124,10 @@ for i in range(int(words)):
                         prev = choice
                 elif prev == "N":
                     if choice in ["K","G"]:
+                        word += choice
+                        prev = choice
+                elif prev == "R":
+                    if choice in ["B","T", "C", "D", "G", "K", "L", "M", "N", "P", "S", "T", "W"]:
                         word += choice
                         prev = choice
                 else:
