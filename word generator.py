@@ -85,7 +85,7 @@ for i in range(int(words)):
                 if prev == choice and len(word) > 2 and word[-2] != choice:
                     word += choice
                     prev = choice
-                # Specific consonant blends
+                # Common consonant blends
                 elif prev == "D":
                     if choice == "R":
                         word += choice
@@ -144,6 +144,9 @@ for i in range(int(words)):
                         word = word[:-1] + "I"
                         word += "E"
                         prev = "E"
+                else:
+                    word += choice
+                    prev = choice
             # Consonants are always allowed after vowels or vice versa
             else:
                 # C is always K if followed by E, I, or Y
