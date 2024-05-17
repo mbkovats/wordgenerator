@@ -12,6 +12,14 @@ def generate(min, max, num, count, window):
     text.insert(END, str1)
     text.grid(row=8,column=2)
 
+def add_to_favorites(word, window):
+    if word in ["", 0]:
+        return
+    file = open("favorites.txt", "a")
+    file.write(word + "\n")
+    file.close()
+    message = Message(window, text="added " + str(word) + " to favorites")
+    message.grid(row=11, column=2)
 
 window = Tk()
 window.resizable(False,False)
@@ -36,6 +44,9 @@ e4.bind("<Return>", (lambda event: generate(e1.get(),e2.get(),e3.get(),e4.get(),
 button = Button(window, text="Generate", command=lambda: generate(e1.get(), e2.get(), e3.get(), e4.get(),window))
 button.grid(row=4, column=3)
 Label(window, text="Words:").grid(row=7, column=2)
-
+Label(window, text="Add to Favorites:").grid(row=9, column=2)
+e5 = Entry(window)
+e5.grid(row=10, column=2)
+e5.bind("<Return>", (lambda event: add_to_favorites(e5.get(), window)))
 
 window.mainloop()
