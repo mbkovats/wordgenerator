@@ -16,6 +16,11 @@ def add_to_favorites(word, window):
     if word in ["", 0]:
         return
     file = open("favorites.txt", "a")
+    words = open("favorites.txt", "r").read().split("\n")
+    if word in words:
+        message = Message(window, text="word already in favorites")
+        message.grid(row=11, column=2)
+        return
     file.write(word + "\n")
     file.close()
     message = Message(window, text="added " + str(word) + " to favorites")
@@ -48,5 +53,6 @@ Label(window, text="Add to Favorites:").grid(row=9, column=2)
 e5 = Entry(window)
 e5.grid(row=10, column=2)
 e5.bind("<Return>", (lambda event: add_to_favorites(e5.get(), window)))
+
 
 window.mainloop()
