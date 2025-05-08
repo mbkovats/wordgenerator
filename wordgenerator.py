@@ -16,7 +16,7 @@ def word_generator(minlen: int, maxlen: int, words: int, nulls: int):
     # Generate the words
     for _ in range(int(words)):
         # Decide if Y is a vowel or consonant
-        if random.randint(0,1) == 1:
+        if random.randint(0,1000) < 975:
             vowels.append("Y")
         else:
             consonants.append("Y")
@@ -77,52 +77,68 @@ def word_generator(minlen: int, maxlen: int, words: int, nulls: int):
                         word += choice
                         prev = choice
                     # Common consonant blends
-                    elif prev == "D":
-                        if choice == "R":
-                            word += choice
-                            prev = choice
-                    elif prev == "S":
-                        if choice in ["T","C","L","K","M","N","P","T","W","H"]:
-                            word += choice
-                            prev = choice
-                    elif prev == "P": 
-                        if choice in ["H", "L", "R"]:
-                            word += choice
-                            prev = choice
-                    elif prev == "T": 
-                        if choice in ["H","R","L","W"]:
-                            word += choice
-                            prev = choice
-                    elif prev == "W": 
-                        if choice in ["R","H"]:
-                            word += choice
-                            prev = choice
-                    elif prev == "B": 
-                        if choice in ["R","L"]:
-                            word += choice
-                            prev = choice
-                    elif prev == "C":
-                        if choice in ["L","R","H","K"]:
-                            word += choice
-                            prev = choice
-                    elif prev == "F":
-                        if choice in ["L","R"]:
-                            word += choice
-                            prev = choice
-                    elif prev == "G":
-                        if choice in ["L","R","H"]:
-                            word += choice
-                            prev = choice
-                    elif prev == "N":
-                        if choice in ["K","G"]:
-                            word += choice
-                            prev = choice
-                    elif prev == "R":
-                        if choice in ["B","T", "C", "D", "G", "K", "L", "M", "N", "P", "S", "T", "W"]:
-                            word += choice
-                            prev = choice
+                    elif len(word) < 3:
+                        if prev == "D":
+                            if choice == "R":
+                                word += choice
+                                prev = choice
+                        elif prev == "S":
+                            if choice in ["T","C","L","K","M","N","P","W","H"]:
+                                word += choice
+                                prev = choice
+                        elif prev == "P": 
+                            if choice in ["H", "L", "R"]:
+                                word += choice
+                                prev = choice
+                        elif prev == "T": 
+                            if choice in ["H","R","L","W"]:
+                                word += choice
+                                prev = choice
+                        elif prev == "W": 
+                            if choice in ["R","H"]:
+                                word += choice
+                                prev = choice
+                        elif prev == "B": 
+                            if choice in ["R","L"]:
+                                word += choice
+                                prev = choice
+                        elif prev == "C":
+                            if choice in ["L","R","H"]:
+                                word += choice
+                                prev = choice
+                        elif prev == "F":
+                            if choice in ["L","R"]:
+                                word += choice
+                                prev = choice
+                        elif prev == "G":
+                            if choice in ["L","R","H"]:
+                                word += choice
+                                prev = choice
                     else:
-                        pass
+                        if prev == "S":
+                            if choice in ["T","K","M","H"]:
+                                word += choice
+                                prev = choice
+                        elif prev == "R":
+                            if choice in ["B","T", "C", "D", "G", "K", "L", "M", "N", "P", "S", "W"]:
+                                word += choice
+                                prev = choice
+                        elif prev == "N":
+                            if choice in ["K","G"]:
+                                word += choice
+                                prev = choice
+                        elif prev == "G":
+                            if choice in ["H"]:
+                                word += choice
+                                prev = choice
+                        elif prev == "C":
+                            if choice in ["H", "K"]:
+                                word += choice
+                                prev = choice
+                        elif prev == "P": 
+                            if choice in ["H"]:
+                                word += choice
+                                prev = choice
                 # Back to back vowels are always allowed
                 elif prev in vowels and choice in vowels:
                     # I before E except after C
@@ -135,7 +151,7 @@ def word_generator(minlen: int, maxlen: int, words: int, nulls: int):
                             word = word[:-1] + "I"
                             word += "E"
                             prev = "E"
-                    else:
+                    elif prev != choice or prev in ["O","E"]:
                         word += choice
                         prev = choice
                 # Consonants are always allowed after vowels or vice versa
@@ -152,11 +168,6 @@ def word_generator(minlen: int, maxlen: int, words: int, nulls: int):
                     # Update the previous letter
                     prev = choice
         
-        # Remove Y from the list of vowels or consonants
-        if "Y" in vowels:
-            vowels.remove("Y")
-        else:
-            consonants.remove("Y")
     return wordlist
 
 
